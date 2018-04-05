@@ -1,0 +1,61 @@
+<html>
+<head><meta charset='utf-8'/><title><%=title%></title>
+
+</head>
+<body>
+	<%- message %>
+	<form >
+		<p><input type='text' placeholder='用户名' id='username'/>
+		</p>
+		<p><input type='password' placeholder='密码' id='psw1' name='psw1'/>
+		</p>
+		
+		<p><button type='button' id='login'>确认</button></p>
+		<p><button type='button' id='register'>注册</button></p>
+	</form>
+	<script type="text/javascript" src="javascripts/jquery.min.js"></script>
+	<script type="text/javascript" >
+		$(function(){
+			
+			$('#login').click(function(){
+				var username=$('#username').val();
+				var psw1=$('#psw1').val();
+				
+				var data={'name':username,'psw':psw1};
+				
+				if(!username){
+					
+					$('body').prepend('<div style="color:red;">用户名不能为空</div>');
+				}
+				else {
+					
+					$.ajax({
+						url:'/login',
+						type:'post',
+						data:data,
+						success:function(data,status){
+							if(status=='success'){
+								
+								location.href='home';
+
+							}
+						},
+						error:function(data,err){
+							console.log('ajax fail');
+							location.href='login';
+						}
+
+					})
+					
+				}
+			});
+			
+
+			$('#register').click(function(){
+				location.href='register';
+				
+			});
+		})
+	</script>
+</body>
+</html>

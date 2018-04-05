@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="javascripts/jquery.min.js"></script>
+    <title><%= user.name %>的博客</title>
+    
+    <style type="text/css">
+    *{
+      margin:0;
+      padding:0;
+    }
+    	a{margin-left: 20px; text-decoration: none;margin-right:20px;}
+    	a:hover{text-decoration: underline;}
+        nav{
+        border-top: 200px solid #fa7d3c;
+        background-color: #fff;
+        border: 1px solid #f2f2f5;
+         width: 100%;
+          
+         display: block;
+           
+         overflow: visible;
+         position: fixed;
+         top: 0px; /* position fixed for IE6 */
+            
+           
+         height: 50px;
+         margin-right: 10px;
+
+        }
+        ul{
+          list-style: none;
+          text-decoration: none;
+          text-align:center;
+        }
+        #blog,#user,#logout{
+          float:right;
+          padding:5px;
+        }
+
+    </style>
+  
+  </head>
+  <body>
+    <nav>
+      <div>
+        <ul>
+          <li><a href="/logout" id='logout'>注销 </a></li>
+          <li><a href="#" id='user'><%= user.name %></a></li>
+          <li><a href="#" id='blog'>写博客</a></li>
+        
+        </ul>
+      </div>
+    </nav>
+    <br>
+    <br>
+    <br>
+    <br>
+    <div id='write' style='display:none'>
+      <p>标题：<input type='text' placeholder="请输入标题" name='title' id='title'></p>
+      <p>内容：<input type='textarea' placeholder="..." name='content' id='content'></p>
+       <p><button id='submit'>提交</button></p>
+    </div>
+    <div id='content'>Welcome to your home ~</div>
+   <script>
+     $('#blog').click(function(){
+        $('#write').css('display','block');
+     });
+     $('#submit').click(function(){
+      var title=$('#title').val();
+      var content=$('#content').val();
+      var data={'username':'<%= user.name %>','title':title,'content':content};
+      // alert(data.username+data.title+data.content);
+      $.ajax({
+        url:'/write',
+        type:'get',
+        data:data,
+        success:function(doc){
+          alert(doc);
+        },
+        error:function(err){
+          console.log(err);
+        }
+
+      })
+        //$('#write').css('display','none');
+     });
+   </script>
+  </body>
+</html>

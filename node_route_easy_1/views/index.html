@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>博客园</title>
+
+<script src="javascripts/jquery.min.js"></script>
+
+<style>
+	*{
+		margin:0;
+		padding:0;
+		border:0;
+	}
+	body{
+
+		background-color:#fff;
+	}
+	nav{
+		 background-color: #fff;
+         border: 1px solid #f2f2f5;
+         width: 100%;
+          
+         display: block;
+           
+         overflow: visible;
+         position: fixed;
+         top: 0px; /* position fixed for IE6 */
+            
+           
+         height: 50px;
+
+	}
+	.navbar{
+		margin:0;
+		border-top: 2px solid #fa7d3c;
+		opacity:0.9;
+	}
+	.container{
+		margin-top:50px;
+		min-width: 1170px;
+		margin:50 auto 0;
+	}
+	.container:after{
+		
+            display: block;
+            content:'';
+            clear: both;
+            visibility: hidden;
+    }
+	
+	.navbar-header{
+		padding-left:20px;
+		float:left;
+	}
+	.navbar-nav li{
+		float:right;
+		margin-left:5px;
+		margin-right:5px;
+	}
+	ul{
+		list-style: none;
+		
+		margin:0;
+		padding:0;
+	}
+	a{
+		text-decoration: none;
+	}
+	.col{
+		float:left;
+		margin:0;
+		padding:0;
+	}
+	.left-main{
+		width:18%;
+	}
+	.middle-main{
+		width:50%;
+	}
+	.right-main{
+		width:30%;
+		margin:0;
+		padding:0;
+	}
+	.banner .img li a img{
+		width:100%;
+		height:auto;
+	}
+	img{
+
+	}
+	.img li:nth-child(3){
+		display:none;
+	}
+
+	.img li:nth-child(2){
+		display:none;
+	}
+
+	form{
+		
+		background: #f2f2f5;
+		width:80%;
+	}
+	.loginInput{
+		padding:20px;
+		background: #fff;
+		
+		
+	}
+	.lI{
+		
+
+	}
+	input{
+		border:1px solid #f2f2f5;
+		margin:5px 0;
+		height:30px;
+	}
+	form input{
+		width:100%;
+	}
+	#login{
+		color:#fff;
+		font-size:21px;
+		background-color:#ff8140; 
+		width:100%;
+		border:1px solid #f77c3d;
+		box-shadow: 0px 1px 2px rgba(0,0,0,0.25)
+		
+	}
+	#blogs{
+		border-top:1px solid #f2f2f5;
+		border-bottom:1px solid #f2f2f5;
+		margin-top:20px;
+		
+	}
+	footer{
+		width:100%;
+		height:50px;
+		background: #f2f2f5;
+	}
+</style>
+
+</head>
+<body>
+
+<nav class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  
+    <div class="navbar-header">
+      <a class="navbar-brand" href="#">微博</a>
+    </div>
+    <div class='login'>
+	    <ul class="nav navbar-nav navbar-right">
+	      <li><a href="/register"><span class="glyphicon glyphicon-user" id=''></span> 注册</a></li>
+	      <li><a href="/login"><span class="glyphicon glyphicon-log-in"></span> 登录</a></li>
+	    </ul>
+	
+  </div>
+</nav>
+
+<div class='container'>
+	<div class='row'>
+		<div class='col left-main' style='border: 2px solid green'></div>
+		<div class='col middle-main'>
+			<div class='banner'>
+				<ul class='img'>
+					<li id='pic1'><a href='#'><img src='images/1.jpg' alt='第1张图片'></a></li>
+					<li id='pic2'><a href='#'><img src='images/2.jpg' alt='第2张图片'></a></li>
+					<li id='pic3'><a href='#'><img src='images/3.jpg' alt='第3张图片'></a></li>
+				</ul>
+				<ul class='num'></ul>
+				<div class='btn'>
+					<span class='prev'></span>
+					<span class='next'></span>
+				</div>
+			</div>
+			<div class='content'></div>
+		</div>
+
+		<div class='col right-main' style='border:2px solid blue'>
+			<form >
+				<div class='loginInput'>
+					<div class='lI'>
+						<div id='error'></div>
+					<p><input type='text' placeholder='用户名' id='username'/></p>
+					<p><input type='password' placeholder='密码' id='psw1' name='psw1'/></p>
+					
+					<p><button type='button' id='login'>登录</button></p>
+					<p><button type='button' id='register'>注册</button></p>
+				</div>
+			</div>
+			</form>
+		</div>
+	</div>
+</div>
+<footer></footer>
+
+</body>
+<script>
+	var i=1;
+	var timer=setInterval(function(){
+		i=i%4;
+		if(i==0)i=1;
+		$('#pic1').css('display','none');
+		$('#pic2').css('display','none');
+		$('#pic3').css('display','none');
+		
+
+		
+		var picname='pic'+i;
+		$('#'+picname).css({display:'block'});
+		i++;
+	},3000);
+	
+		var w=$('img').width();
+		var h=w/3*1;
+		$('img').css('height',h+'px');
+		var  alert=1;
+		$(function(){
+			
+			$('#login').click(function(){
+				var username=$('#username').val();
+				var psw1=$('#psw1').val();
+				
+				var data={'name':username,'psw':psw1};
+				
+				if(!username){
+					if(alert){
+					$('#error').html('<div style="color:red;">用户名不能为空</div>');
+					alert=0;
+					}
+				}
+				else {
+					
+					$.ajax({
+						url:'/login',
+						type:'post',
+						data:data,
+						success:function(data,status){
+							if(status=='success'){
+								
+								setTimeout(function(){location.href='home'},2000);
+
+							}
+						},
+						error:function(data,err){
+							console.log('ajax fail');
+							location.href='login';
+						}
+
+					})
+					
+				}
+			});
+			
+
+			$('#register').click(function(){
+				location.href='register';
+				
+			});
+		})
+
+	$(function(){
+		$.ajax({
+			url:'/blogs',
+			type:'get',
+			success:function(data,status){
+				if(status=='success'){
+					for(var i in data)
+					$('.content').append('<div id="blogs"><div id="blogs_name">'+data[i].username+'</div><div id="blogs_title">'+data[i].title+'</div>'+'<div id="blogs_content">'+data[i].content+'</div>');
+					
+				};
+			},
+			error:function(){
+				console.log('ajax blogs fail!');
+			}
+
+		})
+		
+	})
+</script>
+</html>
