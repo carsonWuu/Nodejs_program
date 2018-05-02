@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>
+			<%=title%>
+		</title>
+		<link rel="icon" href="images/1.ico" />
+		<meta charset="utf-8">
+	  	<meta name="viewport" content="width=device-width, initial-scale=1">
+	 	<link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/4.0.0-beta/css/bootstrap.min.css">
+	  	<script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+	  	<script src="https://cdn.bootcss.com/popper.js/1.12.5/umd/popper.min.js"></script>
+	  	<script src="https://cdn.bootcss.com/bootstrap/4.0.0-beta/js/bootstrap.min.js"></script>
+	  	<script src="https://cdn.bootcss.com/vue/2.4.2/vue.min.js"></script>
+	  	<script src="javascripts/main.js"></script>
+	  	<style>
+	  		* {
+            margin: 0;
+            padding: 0;
+        	}
+        	body{
+        		width:1124px;
+        		margin:0 auto;
+        		background: #EEE9E9;
+        		/*
+        		background-repeat:no-repeat; background-size:100% 100%;-moz-background-size:100% 100%;
+        		min-width: 1024px;
+        		*/
+        	}
+        	.header{
+        		display:inline-block;
+        		margin:0 0 5px 0;
+        		padding:0;
+        		height:145px;
+        		width:100%;
+        		background:-webkit-gradient(linear, 0 0, 0 bottom, from(#ff0000),to(rgba(0, 0, 255, 0.5)));  
+
+        	}
+        	.header_left{
+        		
+        		float:left;
+        		
+        		height:85px;
+        		width:300px;
+        		
+        	}
+        	.header_img1{
+        		margin:20px 0 0 0;
+        		width: 124px;
+   				height: 115px;
+        	}
+        	.header_middle{
+        		float:left;
+        		width: 409px;
+			    margin: 20px 0 0 5px;
+			    line-height: 20px;
+			    padding: 20px 0 0 15px;
+        	}
+        	.header_right{
+        		float:right;
+        		width: 129px;
+   				height: 115px;
+        	}
+        	.header_img2{
+        		margin:20px 0 0 5px;
+        		width: 124px;
+   				height: 115px;
+        	}
+        	.container{
+        		margin:0;
+        		padding:0;
+        	}
+        	.row{
+        		margin:0 0 5px 0;
+        		padding:0;
+        	}
+        	.col-sm-9{
+        		
+        		margin-right:0px;
+        		padding:0;
+        	}
+
+        	.col-sm-7{
+        		
+        		margin-right:-15px;
+        		padding:0;
+        	}
+
+        	.col-sm-5{
+        		
+        		margin-left:-15px;
+        		padding:0;
+        	}
+        	.col-sm-3{
+        		
+        		margin-left:0px;
+        		padding:0;
+        	}
+
+	  	</style>
+</head>
+<body>
+
+
+	<div class='header'>
+		
+  			<div class='header_left'><img class='header_img1'src='images/1.gif'/></div>
+  			<div class='header_middle text-center'>光阴似箭，岁月如梭</div>
+ 			<div class='header_right'><img class='header_img2'src='images/2.gif'/></div>
+	</div> 
+
+
+<div class="container">
+	<div class="row" style='background-color:#87CEFF;box-shadow: 2px 2px 2px #bdbdbd;'>
+		<div style='float:left;'>
+		  <div class="btn-group">
+		  	<button class="btn btn-primary" id='id1'>发表</button>
+		  	<a href='http://localhost:3003/'><button class="btn btn-primary">下载</button></a>
+		  	<a href='/chat'><button class="btn btn-primary">聊天室</button></a>
+		    <button class="btn btn-primary">Java</button>
+		    <button class="btn btn-primary">...</button>
+		  </div>
+		</div>
+		
+	</div>
+	<div class="row" style='display:none' >
+		<div class='col-sm-7 luobo_l'>
+			<img src='images/3.ico'/>
+		</div>
+		<div class='col-sm-5 luobo_r'>
+			<img src='images/4.ico'/>
+		</div>
+	</div>
+	  <div class="row" >
+	    <div class="col-sm-3" id='menu' style='display:none;text-align:left;background-color:#fff'>
+	    	<ul>
+	    		<li><a href=''>blog1</a></li>
+	    	</ul> 
+	    </div>
+	    <div class="col-sm-9" id='main' style='background: #fff'>
+	      <h3>title</h3>
+	      <p>作者</p>
+	      <p>内容</p>
+	    </div>
+	    <div class='text-center' style='display:none;' >
+			<form >
+			    <div class="form-group">
+			      <button style='float:left' for="comment">评论:</button>
+			      <textarea class="form-control" rows="5" id="comment"></textarea>
+			    </div>
+			    </form>
+			
+	    </div>
+	    <div class="col-sm-3" id='main_right'>
+	    	<h4>Cnode前五篇文章</h4>
+		    <ol>
+			    <li v-for="site in message">
+			      <a  v-bind:href='site.href'>{{ site.title }}</a>
+			    </li>
+		  	</ol>
+	    </div>
+	    
+	  </div>
+</div>
+
+
+
+<div class='footer container-fluid text-center' style='margin:0;padding:0'>
+	<img style='height:100px;width:100%;margin:0;padding:0' class='header_img2' src='images/footer.gif'/></div>
+</div>
+
+
+<div style='position:fixed;bottom:10px;right:10px;'>
+	<a href='#'><button>&#8593顶部</button></a>
+</div>
+<script>
+	$(document).ready(function(){
+		var item=[];
+		console.log(typeof '<%=pachong%>');
+		
+		
+		//var arr =!{JSON.parse(pachong)};
+		//console.log(arr);
+		var title=[],href=[];
+
+		var len='<%=pachong.length%>';
+		var str='<%=pachong[0].title%>'
+		console.log(str)
+		item.push({
+		 	title:'<%=pachong[0].title%>',
+		 	href:'https://cnodejs.org'+'<%=pachong[0].href%>'
+		});
+		item.push({
+		 	title:'<%=pachong[1].title%>',
+		 	href:'https://cnodejs.org'+'<%=pachong[1].href%>'
+		});
+		item.push({
+		 	title:'<%=pachong[2].title%>',
+		 	href:'https://cnodejs.org'+'<%=pachong[2].href%>'
+		});
+		item.push({
+		 	title:'<%=pachong[3].title%>',
+		 	href:'https://cnodejs.org'+'<%=pachong[3].href%>'
+		});
+		item.push({
+		 	title:'<%=pachong[4].title%>',
+		 	href:'https://cnodejs.org'+'<%=pachong[4].href%>'
+		});
+		console.log(item[0].href);
+		new Vue({
+		  el: '#main_right',
+		  data: {
+		    message: item
+		  }
+		})
+	});
+
+	$('#id1').click(function(){
+		var form='<form></';
+
+		$('#main').html('<p>分类 <input type="text" name="lname" id="fenlei"/></p><p>标题 <input type="text" name="fname" id="title" /></p><p>内容 <textarea cols="100" rows="10" placeholder="文章内容" id="neirong"></textarea></p> <input type="submit" value="发表" id="submit"/>');
+		$('#submit').click(function(){
+			var title=$("input:text[name='lname']").val();
+			var fenlei=$("input:text[name='fname']").val();
+			var neirong=$("#neirong").val();
+			data={title:title,fenlei:fenlei,neirong:neirong};
+			console.log(data);
+		
+			$.ajax({
+				url:'/submit',
+
+				data:data,
+				type:'post',
+				success:function(data){
+					alert('提交成功');
+					$('#main').html('发布成功');
+				},
+				error:function(error){}
+			})
+		});
+	})
+</script>
+</body>
+</html>

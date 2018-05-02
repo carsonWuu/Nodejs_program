@@ -1,0 +1,181 @@
+#!/usr/bin/env node
+
+/**
+ * Module dependencies.
+ */
+
+var app = require('../app');
+var debug = require('debug')('blog:server');
+var http = require('http');
+
+/**
+ * Get port from environment and store in Express.
+ */
+
+var port = normalizePort(process.env.PORT || '3000');
+app.set('port', port);
+
+/**
+ * Create HTTP server.
+ */
+
+var server = http.createServer(app);
+
+/**
+ * Listen on provided port, on all network interfaces.
+ */
+
+server.listen(port);
+server.on('error', onError);
+server.on('listening', onListening);
+
+/**
+ * Normalize a port into a number, string, or false.
+ */
+
+function normalizePort(val) {
+  var port = parseInt(val, 10);
+
+  if (isNaN(port)) {
+    // named pipe
+    return val;
+  }
+
+  if (port >= 0) {
+    // port number
+    return port;
+  }
+
+  return false;
+}
+
+/**
+ * Event listener for HTTP server "error" event.
+ */
+
+function onError(error) {
+  if (error.syscall !== 'listen') {
+    throw error;
+  }
+
+  var bind = typeof port === 'string'
+    ? 'Pipe ' + port
+    : 'Port ' + port;
+
+  // handle specific listen errors with friendly messages
+  switch (error.code) {
+    case 'EACCES':
+      console.error(bind + ' requires elevated privileges');
+      process.exit(1);
+      break;
+    case 'EADDRINUSE':
+      console.error(bind + ' is already in use');
+      process.exit(1);
+      break;
+    default:
+      throw error;
+  }
+}
+
+/**
+ * Event listener for HTTP server "listening" event.
+ */
+
+function onListening() {
+  var addr = server.address();
+  var bind = typeof addr === 'string'
+    ? 'pipe ' + addr
+    : 'port ' + addr.port;
+  debug('Listening on ' + bind);
+}
+
+
+
+//引入程序包
+var express = require('express')
+  , io = require('socket.io').listen(server);
+
+//设置日志级别
+io.set('log level', 1); 
+
+//WebSocket连接监听
+var count=0;
+io.on('connection', function (socket) {
+  count++;
+
+  console.log(count);  
+  socket.emit('open');//通知客户端已连接
+
+  // 打印握手信息
+  // console.log(socket.handshake);
+
+  // 构造客户端对象
+  var client = {
+    socket:socket,
+    name:false,
+    color:getColor()
+  }
+  
+  // 对message事件的监听
+  socket.on('message', function(msg){
+
+    var obj = {time:getTime(),color:client.color};
+
+    // 判断是不是第一次连接，以第一条消息作为用户名
+    if(!client.name){
+        client.name = msg;
+        obj['text']=client.name;
+        obj['author']='System';
+        obj['type']='welcome';
+        console.log(client.name + ' login');
+
+        //返回欢迎语
+        socket.emit('system',obj);
+        //广播新用户已登陆
+        socket.broadcast.emit('system',obj);
+     }else{
+
+        //如果不是第一次的连接，正常的聊天消息
+        obj['text']=msg;
+        obj['author']=client.name;      
+        obj['type']='message';
+        console.log(client.name + ' say: ' + msg);
+
+        // 返回消息（可以省略）
+        socket.emit('message',obj);
+        // 广播向其他用户发消息
+        socket.broadcast.emit('message',obj);
+      }
+    });
+
+    //监听出退事件
+    socket.on('disconnect', function () {  
+      count--;
+      var obj = {
+        time:getTime(),
+        color:client.color,
+        author:'System',
+        text:client.name,
+        type:'disconnect'
+      };
+
+      // 广播用户已退出
+      socket.broadcast.emit('system',obj);
+      console.log(client.name + 'Disconnect');
+    });
+  
+});
+
+
+
+
+var getTime=function(){
+  var date = new Date();
+  return date.getHours()+":"+date.getMinutes()+":"+date.getSeconds();
+}
+
+var getColor=function(){
+  var colors = ['aliceblue','antiquewhite','aqua','aquamarine','pink','red','green',
+                'orange','blue','blueviolet','brown','burlywood','cadetblue'];
+  return colors[Math.round(Math.random() * 10000 % colors.length)];
+}
